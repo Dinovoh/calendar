@@ -5,7 +5,9 @@ class EventsController < ApplicationController
     @events = current_user.events.sort_by(&:start_event)
   end
 
-  def show; end
+  def show
+    @creator = User.find_by(id: @event.created_by)
+  end
 
   def new
     @event = Event.new
@@ -14,8 +16,11 @@ class EventsController < ApplicationController
   def edit; end
 
   def create
-    @event = current_user.events.new(event_params)
+    # @event = current_user.events.new(event_params)
+    @event = Event.new(event_params)
+    @event.created_by = current_user.id
     if @event.save
+      current_user.events << @event
       redirect_to root_path
     else
       render 'new'
@@ -42,6 +47,6 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :description, :location, :date, :start_event, :end_event)
+    params.require(:event).permit(:name, :description, :location, :date, :start_event, :end_event, user_ids: [])
   end
 end

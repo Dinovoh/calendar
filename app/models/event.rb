@@ -1,5 +1,5 @@
 class Event < ApplicationRecord
-  belongs_to :user
+  has_and_belongs_to_many :users
   validates :name, presence: true, length: { in: 1..30 }
   validates :description, length: { maximum: 500 }
   validates :location, length: { maximum: 100 }

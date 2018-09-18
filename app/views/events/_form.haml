@@ -5,4 +5,7 @@
   = f.input :date, as: :date
   = f.input :start_event, as: :time, label: 'Start time'
   = f.input :end_event, as: :time, label: 'End time'
+  %hr
+  = f.association :users, as: :check_boxes, label_method: :name, label: 'Invite users:'
+  / = f.collection_check_boxes :user_ids, User.all, :id, :email
   = f.button :submit, class: 'btn btn-outline-success'
