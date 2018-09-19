@@ -17,18 +17,19 @@
       %tr
         %td.text-right.text-secondary location:
         %td= @event.location
-      %tr
-        %td.text-right.text-secondary organizer:
-        %td
-          = link_to @creator.name, user_path(@creator)
-      %tr
-        %td.text-right.text-secondary invited users:
-        %td
-          %ul
-            - @event.users.each do |user|
-              - unless user.id == @event.created_by
-                %li= link_to user.name, user
-  - if current_user.id == @event.created_by
+      - if @event.users.exists?
+        %tr
+          %td.text-right.text-secondary organizer:
+          %td
+            = link_to @event.creator.name, user_path(@event.creator)
+        %tr
+          %td.text-right.text-secondary invited users:
+          %td
+            %ul
+              - @event.users.each do |user|
+                - unless user.id == @event.creator
+                  %li= link_to user.name, user
+  - if current_user == @event.creator
     = link_to 'Edit', edit_event_path(@event), class: 'btn btn-outline-success'
     = link_to 'Delete', @event, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-outline-danger'
   %br
