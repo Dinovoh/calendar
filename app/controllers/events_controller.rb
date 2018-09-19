@@ -5,9 +5,7 @@ class EventsController < ApplicationController
     @events = current_user.events.sort_by(&:start_event)
   end
 
-  def show
-    @creator = User.find_by(id: @event.created_by)
-  end
+  def show; end
 
   def new
     @event = Event.new
@@ -16,11 +14,8 @@ class EventsController < ApplicationController
   def edit; end
 
   def create
-    # @event = current_user.events.new(event_params)
-    @event = Event.new(event_params)
-    @event.created_by = current_user.id
+    @event = current_user.events.new(event_params.merge(created_by: current_user))
     if @event.save
-      current_user.events << @event
       redirect_to root_path
     else
       render 'new'
