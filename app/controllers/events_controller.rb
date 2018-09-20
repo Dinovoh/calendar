@@ -14,7 +14,8 @@ class EventsController < ApplicationController
   def edit; end
 
   def create
-    @event = current_user.events.new(event_params.merge(created_by: current_user))
+    @event = current_user.events.create(event_params)
+    # binding.pry
     if @event.save
       redirect_to root_path
     else
