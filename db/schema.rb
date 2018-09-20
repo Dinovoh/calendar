@@ -12,6 +12,13 @@
 
 ActiveRecord::Schema.define(version: 2018_09_18_111217) do
 
+  create_table "associations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "event_id"
+    t.bigint "user_id"
+    t.index ["event_id"], name: "index_associations_on_event_id"
+    t.index ["user_id"], name: "index_associations_on_user_id"
+  end
+
   create_table "events", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "description"
@@ -23,13 +30,6 @@ ActiveRecord::Schema.define(version: 2018_09_18_111217) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_events_on_creator_id"
-  end
-
-  create_table "events_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.bigint "event_id"
-    t.bigint "user_id"
-    t.index ["event_id"], name: "index_events_users_on_event_id"
-    t.index ["user_id"], name: "index_events_users_on_user_id"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

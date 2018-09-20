@@ -1,6 +1,8 @@
 class Event < ApplicationRecord
-  has_and_belongs_to_many :users
-  belongs_to :creator, class_name: :User
+  has_many :associations
+  has_many :users, through: :associations
+  belongs_to :creator, class_name: :User, foreign_key: :creator_id
+
   validates :name, presence: true, length: { in: 1..30 }
   validates :description, length: { maximum: 500 }
   validates :location, length: { maximum: 100 }

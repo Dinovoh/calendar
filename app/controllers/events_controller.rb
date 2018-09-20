@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   before_action :load_event, only: [:show, :edit, :update, :destroy]
 
   def index
-    @events = events_with_current_user.sort_by(&:start_event)
+    @events = current_user.events.sort_by(&:start_event)
   end
 
   def show; end
@@ -14,7 +14,9 @@ class EventsController < ApplicationController
   def edit; end
 
   def create
-    @event = current_user.events.new(event_params)
+    @event = Event.new(event_params)
+    @event.creator = current_user
+    binding.pry
     if @event.save
       redirect_to root_path
     else
@@ -42,10 +44,11 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.require(:event).permit(:name, :description, :location, :date, :start_event, :end_event, user_ids: [])
+    params.require(:event).permit(:name, :description, :location, :date, :start_event, :end_event, :creator_id, user_ids: [])
   end
 
   def events_with_current_user
-    current_user.events + Event.all.inject([]) { |events, e| events << e if e.users.include?(current_user); events }
+    Event.all
+    # current_user.events + Event.all.inject([]) { |events, e| events << e if e.users.include?(current_user); events }
   end
 end
